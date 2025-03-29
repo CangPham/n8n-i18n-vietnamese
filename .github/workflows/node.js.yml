@@ -78,8 +78,8 @@ jobs:
     - name: check n8n editor-ui is old
       id: editorui_dir
       run: |
-        DIR_PATH="/home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n/packages/frontend/editor-ui"       # 你要检查的目录
-        FALLBACK_DIR="/home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n/packages/editor-ui" # 备用目录
+        DIR_PATH="/home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n/packages/frontend/editor-ui"       # Thư mục cần kiểm tra
+        FALLBACK_DIR="/home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n/packages/editor-ui" # Thư mục dự phòng
 
         if [ -d "$DIR_PATH" ]; then
           echo "flag=new" >> $GITHUB_OUTPUT
@@ -108,13 +108,13 @@ jobs:
       run: pnpm build
       working-directory: ${{ steps.editorui_dir.outputs.dir }}
 
-    - name: 打包 dist 产物
+    - name: Đóng gói sản phẩm dist
       if: steps.check_tag.outputs.exists == 'false'
       run: |
         tar -czvf editor-ui.tar.gz dist
       working-directory: ${{ steps.editorui_dir.outputs.dir }}
 
-    - name: 创建 git tag
+    - name: Tạo git tag
       if: steps.check_tag.outputs.exists == 'false'
       run: |
         TAG="${{ steps.latest_release.outputs.latest }}"
@@ -124,7 +124,7 @@ jobs:
         git push origin $TAG
       working-directory: /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n-i18n-vietnamese
 
-    - name: 创建 GitHub Release
+    - name: Tạo GitHub Release
       if: steps.check_tag.outputs.exists == 'false'
       id: create_release
       uses: softprops/action-gh-release@v2
@@ -132,7 +132,7 @@ jobs:
         tag_name: ${{ steps.latest_release.outputs.latest }}
         name: Release editor-ui to ${{ steps.latest_release.outputs.latest }}
         body: |
-          自动发布的中文语言包版本。
+          Phiên bản gói ngôn ngữ tiếng Việt được phát hành tự động.
         draft: false
         prerelease: false
         files: ${{ steps.editorui_dir.outputs.dir }}/editor-ui.tar.gz
