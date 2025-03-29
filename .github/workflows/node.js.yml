@@ -25,7 +25,7 @@ jobs:
     - name: Checkout local
       uses: actions/checkout@v4
       with:
-        path: ./n8n-i18n-chinese
+        path: ./n8n-i18n-vietnamese
 
     # - name: Read version from package.json
     #   id: get_version
@@ -33,7 +33,7 @@ jobs:
     #     VERSION=$(jq -r '.version' package.json)
     #     echo "Version: $VERSION"
     #     echo "version=$VERSION" >> $GITHUB_OUTPUT
-    #   working-directory: /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n
+    #   working-directory: /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n
 
     - name: Check if tag exists
       id: check_tag
@@ -45,7 +45,7 @@ jobs:
         else
           echo "exists=false" >> $GITHUB_OUTPUT
         fi
-      working-directory: /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n-i18n-chinese
+      working-directory: /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n-i18n-vietnamese
 
     - name: Exit if tags exist
       if: steps.check_tag.outputs.exists == 'true'
@@ -73,13 +73,13 @@ jobs:
 
     - run: pnpm install --frozen-lockfile
       if: steps.check_tag.outputs.exists == 'false'
-      working-directory: /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n
+      working-directory: /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n
 
     - name: check n8n editor-ui is old
       id: editorui_dir
       run: |
-        DIR_PATH="/home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n/packages/frontend/editor-ui"       # 你要检查的目录
-        FALLBACK_DIR="/home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n/packages/editor-ui" # 备用目录
+        DIR_PATH="/home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n/packages/frontend/editor-ui"       # 你要检查的目录
+        FALLBACK_DIR="/home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n/packages/editor-ui" # 备用目录
 
         if [ -d "$DIR_PATH" ]; then
           echo "flag=new" >> $GITHUB_OUTPUT
@@ -91,17 +91,17 @@ jobs:
 
     - name: Move editor-ui i18n language
       if: steps.check_tag.outputs.exists == 'false'
-      run:     cp -r /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n-i18n-chinese/languages/* "${{ steps.editorui_dir.outputs.dir }}/src/plugins/i18n/locales/"
+      run:     cp -r /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n-i18n-vietnamese/languages/* "${{ steps.editorui_dir.outputs.dir }}/src/plugins/i18n/locales/"
 
     - name: Patch New editor-ui
       if: steps.editorui_dir.outputs.flag == 'new' && steps.check_tag.outputs.exists == 'false'
-      run: git apply /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n-i18n-chinese/fix_editor-ui.patch
-      working-directory: /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n
+      run: git apply /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n-i18n-vietnamese/fix_editor-ui.patch
+      working-directory: /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n
 
     - name: Patch Old editor-ui
       if: steps.editorui_dir.outputs.flag == 'old' && steps.check_tag.outputs.exists == 'false'
-      run: git apply /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n-i18n-chinese/fix_editor-ui.old.patch
-      working-directory: /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n
+      run: git apply /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n-i18n-vietnamese/fix_editor-ui.old.patch
+      working-directory: /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n
 
     - name: Pnpm build editor-ui
       if: steps.check_tag.outputs.exists == 'false'
@@ -122,7 +122,7 @@ jobs:
         git config --global user.email "github-actions@github.com"
         git tag $TAG
         git push origin $TAG
-      working-directory: /home/runner/work/n8n-i18n-chinese/n8n-i18n-chinese/n8n-i18n-chinese
+      working-directory: /home/runner/work/n8n-i18n-vietnamese/n8n-i18n-vietnamese/n8n-i18n-vietnamese
 
     - name: 创建 GitHub Release
       if: steps.check_tag.outputs.exists == 'false'
